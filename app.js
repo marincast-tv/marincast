@@ -29,7 +29,7 @@
     try { localStorage.setItem("rt-tuned-once", "1"); } catch (e) {}
   }
 
-  var state = { i: 0, col: 0, tuned: false };
+  var state = { i: 0, col: 0, tuned: false, look: false };
   var rows = [];
   var frame = null, frameSrc = "";
   var swapTimer = 0, bannerTimer = 0, busy = false;
@@ -214,25 +214,108 @@
     swapTimer = setTimeout(function () { setFrame(srcFor(cur(), state.col)); }, 250);
   }
 
-  // ---------- the one iframe ----------
+  // ---------- the picture: a still (Street View Static) or the one live iframe ----------
+
+  var SV_KEY = (typeof window.SV_KEY === "string") ? window.SV_KEY.trim() : "";
+  var stillFails = 0, stillBad = {};
+  function stillsOn() { return !!SV_KEY && stillFails < 3; }
+  if (SV_KEY) document.documentElement.classList.add("stills");
+
+  // pano id, heading, pitch, zoom out of an embed URL
+  function parseEmbed(src) {
+    var g = function (re) { var m = re.exec(src || ""); return m ? m[1] : null; };
+    var pano = g(/!1s([^!]+)/);
+    if (!pano) return null;
+    var zoom = parseFloat(g(/!5f([-\d.]+)/));
+    var fov = isFinite(zoom) ? Math.round(180 / Math.pow(2, zoom)) : 90;
+    return {
+      pano: pano,
+      heading: parseFloat(g(/!3f([-\d.]+)/)) || 0,
+      pitch: parseFloat(g(/!4f([-\d.]+)/)) || 0,
+      fov: Math.max(10, Math.min(120, fov))
+    };
+  }
+  // ask for the box's own aspect so nothing (including Google's mark) gets cropped
+  function stillSize() {
+    var w = preview.clientWidth || 640, h = preview.clientHeight || 480;
+    var sh = Math.round(640 * h / w / 20) * 20;
+    return "640x" + Math.max(160, Math.min(640, sh));
+  }
+  function stillURL(src, size) {
+    var v = parseEmbed(src);
+    if (!v) return null;
+    size = size || stillSize();
+    // keep the vertical framing of a 4:3 shot, widen horizontally for wide boxes,
+    // so a sign framed in the embed stays in frame in a short, wide picture
+    var wh = size.split("x"), aspect = (+wh[0]) / (+wh[1]);
+    var rad = Math.PI / 180, vfov = v.fov * 0.75;
+    var fov = Math.round(2 * Math.atan(Math.tan(vfov / 2 * rad) * aspect) / rad);
+    fov = Math.max(10, Math.min(120, fov));
+    // per-channel pitch override: the embed's !4f does not map 1:1 to the Static API
+    var p = cur(), pitch = v.pitch, ov = null;
+    if (p && src === p.embedSrc) ov = p.stillPitch;
+    else if (p && src === p.nowEmbedSrc) ov = p.nowStillPitch;
+    if (typeof ov === "number" && isFinite(ov)) pitch = ov;
+    return "https://maps.googleapis.com/maps/api/streetview?size=" + size +
+      "&pano=" + encodeURIComponent(v.pano) + "&heading=" + v.heading + "&pitch=" + pitch +
+      "&fov=" + fov + "&return_error_code=true&key=" + encodeURIComponent(SV_KEY);
+  }
+  function preloadOther() {
+    if (!stillsOn() || !state.tuned) return;
+    var p = cur(), other = state.col ? p.embedSrc : p.nowEmbedSrc;
+    if (!other || stillBad[other]) return;
+    var u = stillURL(other);
+    if (u) { var im = new Image(); im.referrerPolicy = "no-referrer-when-downgrade"; im.src = u; }
+  }
 
   function setFrame(src) {
-    if (src === frameSrc && frame) return;
-    if (frame) { frame.src = "about:blank"; frame.remove(); }
     var p = cur();
+    var still = stillsOn() && !state.look && !stillBad[src] && stillURL(src);
+    var key = still ? "img|" + still : "ifr|" + src;
+    if (key === frameSrc && frame) return;
+    if (frame) { frame.onerror = null; frame.onload = null; frame.src = "about:blank"; frame.remove(); }
+    preview.classList.remove("loaded");
+    if (still) {
+      frame = document.createElement("img");
+      frame.className = "still";
+      frame.alt = "Street View: " + (p.name || p.town || p.id);
+      frame.decoding = "async";
+      frame.referrerPolicy = "no-referrer-when-downgrade";
+      frame.onload = function () { preview.classList.add("loaded"); };
+      frame.onerror = function () {
+        // key missing, quota, no imagery: fall back to the live embed
+        stillFails++;
+        stillBad[src] = true;
+        frameSrc = "";
+        setFrame(src);
+      };
+      frame.src = still;
+      preview.appendChild(frame);
+      frameSrc = key;
+      preloadOther();
+      return;
+    }
     frame = document.createElement("iframe");
     frame.src = src;
     frame.title = "Street View: " + (p.name || p.town || p.id);
     frame.setAttribute("allowfullscreen", "");
     frame.setAttribute("referrerpolicy", "no-referrer-when-downgrade");
     frame.setAttribute("tabindex", "-1");
+    frame.onload = function () { setTimeout(function () { preview.classList.add("loaded"); }, 1200); };
     preview.appendChild(frame);
-    frameSrc = src;
+    frameSrc = key;
+  }
+
+  function setLook(on) {
+    state.look = !!on;
+    var b = $("blook");
+    if (b) b.setAttribute("aria-pressed", state.look ? "true" : "false");
   }
 
   function clearFrame() {
-    if (frame) { frame.src = "about:blank"; frame.remove(); }
+    if (frame) { frame.onerror = null; frame.onload = null; frame.src = "about:blank"; frame.remove(); }
     frame = null; frameSrc = "";
+    preview.classList.remove("loaded");
   }
 
   // ---------- static transition ----------
@@ -345,6 +428,7 @@
     if (location.hash !== h) history.replaceState(null, "", h);
 
     function enter() {
+      setLook(false);
       hintSeen();
       if (isPhone()) window.scrollTo(0, 0);
       noteTuned(state.i);
@@ -375,6 +459,7 @@
   function toGuide() {
     if (!state.tuned) return;
     state.tuned = false;
+    setLook(false);
     clearTimeout(bannerTimer);
     banner.classList.remove("up");
     if (location.hash) history.replaceState(null, "", location.pathname + location.search);
@@ -385,6 +470,9 @@
         clearFrame();
         var r = rows[state.i];
         if (r) r.scrollIntoView({ block: "center" });
+      } else {
+        // the guide preview is a different shape: ask for a still that fits it
+        setFrame(srcFor(cur(), state.col));
       }
     }, 350);
     blip(980);
@@ -395,6 +483,7 @@
     if (col === state.col) return;
     var p = cur();
     state.col = col;
+    setLook(false);
     blip(col ? 1320 : 900);
     if (state.tuned) {
       cutTo(function () { render(); setFrame(srcFor(p, col)); });
@@ -414,6 +503,7 @@
         return;
       }
       state.i = i; state.col = 0;
+      setLook(false);
       noteTuned(i);
       blip();
       cutTo(function () {
@@ -562,6 +652,42 @@
     else { select(i, 0, true); tuneIn(); }
   }
 
+  // standby screensaver: the logo drifts and bounces, changing colour on each bounce
+  var saver = null, saverRaf = 0;
+  var SAVER_COLORS = ["#d9524a", "#e9cf5a", "#6fb0ea"];
+  function startSaver() {
+    var panel = $("panel");
+    if (!panel || saver) return;
+    saver = el("div", "saver");
+    saver.setAttribute("aria-hidden", "true");
+    var logo = el("div", "saver-logo");
+    logo.innerHTML = '<svg viewBox="0 0 22 40" aria-hidden="true"><path d="M20 2A18 18 0 0 0 20 38A20.23 20.23 0 0 1 20 2Z" fill="currentColor"/></svg><span>marincast</span>';
+    saver.appendChild(logo);
+    panel.appendChild(saver);
+    var ci = 0;
+    logo.style.color = SAVER_COLORS[ci];
+    if (reduced.matches) { saver.classList.add("still"); return; }
+    var x = 20, y = 20, vx = 2.3, vy = 1.8, last = performance.now();
+    (function step(now) {
+      if (!saver) return;
+      var dt = Math.min(48, now - last) / 16.7; last = now;
+      var W = saver.clientWidth - logo.offsetWidth, H = saver.clientHeight - logo.offsetHeight;
+      x += vx * dt; y += vy * dt;
+      var hit = false;
+      if (x <= 0) { x = 0; vx = Math.abs(vx); hit = true; }
+      if (x >= W) { x = Math.max(0, W); vx = -Math.abs(vx); hit = true; }
+      if (y <= 0) { y = 0; vy = Math.abs(vy); hit = true; }
+      if (y >= H) { y = Math.max(0, H); vy = -Math.abs(vy); hit = true; }
+      if (hit) { ci = (ci + 1) % SAVER_COLORS.length; logo.style.color = SAVER_COLORS[ci]; }
+      logo.style.transform = "translate(" + x.toFixed(1) + "px," + y.toFixed(1) + "px)";
+      saverRaf = requestAnimationFrame(step);
+    })(last);
+  }
+  function stopSaver() {
+    cancelAnimationFrame(saverRaf);
+    if (saver) { saver.remove(); saver = null; }
+  }
+
   function power() {
     var on = !state.off;
     if (on) {
@@ -571,8 +697,10 @@
       showKeypad("");
       led.classList.add("standby");
       var done = function () {
+        if (!state.off) return;
         clearFrame();
         screen.hidden = true;
+        startSaver();
       };
       if (!reduced.matches && screen.animate) {
         var a = screen.animate([
@@ -585,6 +713,7 @@
       } else done();
     } else {
       state.off = false;
+      stopSaver();
       led.classList.remove("standby");
       state.tuned = false;
       screen.classList.remove("tuned");
@@ -614,6 +743,13 @@
       else { showKeypad(compact ? "INFO SHORT" : "INFO FULL", true); clearTimeout(volTimer); volTimer = setTimeout(function () { showKeypad(""); }, 1200); }
     },
     exit: function () { toGuide(); },
+    look: function () {
+      if (!state.tuned) { tuneIn(); return; }
+      if (!stillsOn()) return;
+      setLook(!state.look);
+      cutTo(function () { setFrame(srcFor(cur(), state.col)); }, 220);
+      showBanner();
+    },
     up: function () { channel(-1); },
     down: function () { channel(1); },
     left: function () { flip(0); },
@@ -702,6 +838,7 @@
     else if (k === "ArrowRight") { flip(1); e.preventDefault(); }
     else if (k === "Enter" && !state.tuned && tag !== "BUTTON") { tuneIn(); e.preventDefault(); }
     else if (k === "Escape") { toGuide(); }
+    else if ((k === "l" || k === "L") && state.tuned) { ACTS.look(); }
     else if ((k === "i" || k === "I") && state.tuned) { setCompact(!compact); showBanner(); }
   });
 

@@ -1157,3 +1157,106 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,.6), inset 0 1px 0 #fff;
   }
 }
+
+/* ---------- stills, test-pattern slate, standby saver ---------- */
+
+.preview .still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;          /* requested at the box's own aspect, so nothing is cropped */
+  background: transparent;
+  pointer-events: none;
+}
+
+/* SMPTE-style bars while the picture loads; sits under the picture, never over it */
+.slate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background:
+    linear-gradient(to right, #c0c0c0 0 14.28%, #c0c000 0 28.57%, #00c0c0 0 42.85%, #00c000 0 57.14%, #c000c0 0 71.42%, #c00000 0 85.71%, #0000c0 0) top / 100% 67% no-repeat,
+    linear-gradient(to right, #0000c0 0 14.28%, #131313 0 28.57%, #c000c0 0 42.85%, #131313 0 57.14%, #00c0c0 0 71.42%, #131313 0 85.71%, #c0c0c0 0) 0 67% / 100% 8% no-repeat,
+    linear-gradient(to right, #00214c 0 17.85%, #ffffff 0 35.7%, #32006a 0 53.55%, #131313 0 71.4%, #090909 0 76.2%, #131313 0 81%, #1d1d1d 0 85.7%, #131313 0) bottom / 100% 25% no-repeat,
+    #131313;
+}
+.slate span {
+  margin-bottom: 7%;
+  padding: .45em .8em .35em;
+  background: #000;
+  color: #fff;
+  font: 700 clamp(9px, 1cqw, 15px)/1 "Fira Sans", Arial, sans-serif;
+  letter-spacing: .14em;
+  white-space: nowrap;
+  text-shadow: none;
+}
+.preview.loaded .slate { display: none; }
+.tuning { display: none; }
+
+/* LOOK only exists when stills are on */
+.r-look, #blook { display: none !important; }
+.stills .r-look { display: inline-block !important; }
+.stills .r-exit { display: none !important; }
+.stills #blook { display: inline-flex !important; }
+#blook[aria-pressed="true"] { color: var(--hi-ink); background: var(--hi); }
+
+/* standby: bouncing logo on a black panel */
+.saver {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  background: #000;
+}
+.saver-logo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: .1em;
+  font: 700 clamp(18px, 3vw, 44px)/1 "Quicksand", "Trebuchet MS", sans-serif;
+  will-change: transform;
+}
+.saver-logo svg { height: 1.25em; width: auto; aspect-ratio: 22 / 40; display: block; }
+.saver.still .saver-logo { left: 50%; top: 50%; transform: translate(-50%, -50%); }
+@media (max-width: 719px) {
+  .panel { position: relative; }
+  .panel:has(.saver) { min-height: 62vw; }
+  /* the phone guide is a long list: keep the cable notice on screen */
+  .notice { position: fixed; z-index: 60; }
+}
+
+/* ---------- tuned in on desktop/tablet: squeeze-back, 4:3 picture left, banner column right ---------- */
+@media (min-width: 720px) {
+  .screen.tuned {
+    grid-template-columns: 75% 25%;          /* 75% of a 16:9 width = a 4:3 box at full height */
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "preview banner";
+  }
+  .screen.tuned .banner {
+    min-height: 0;
+    height: 100%;
+    border-top: 0;
+    border-left: .3cqw solid var(--gap);
+  }
+  .screen.tuned .bin {
+    height: 100%;
+    max-height: none;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "main" "side" "story";
+    align-content: start;
+    row-gap: 1.1cqw;
+    padding: 1.4cqw 1.3cqw 1.6cqw;
+  }
+  .screen.tuned .btitle { font-size: clamp(17px, 2.05cqw, 34px); }
+  .screen.tuned .bside { flex-direction: column; align-items: stretch; gap: .6cqw; }
+  .screen.tuned .flip button { flex: 1; }
+  .screen.tuned .bbtns { display: grid; grid-template-columns: 1fr 1fr; gap: .4cqw; }
+  .screen.tuned .bstory { margin: 0; max-width: none; font-size: clamp(14px, 1.42cqw, 22px); line-height: 1.5; }
+  .screen.tuned .bkey { top: auto; bottom: 1cqw; right: 1cqw; }
+}

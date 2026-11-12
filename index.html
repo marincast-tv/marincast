@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%20-11.5%2048%2048%22%3E%3Cpath%20d%3D%22M0%2025A24%2024%200%200%201%2048%2025Z%22%20fill%3D%22%23d9524a%22/%3E%3Cpath%20d%3D%22M3%2025A21%2021%200%200%201%2045%2025Z%22%20fill%3D%22%23e58b3a%22/%3E%3Cpath%20d%3D%22M6%2025A18%2018%200%200%201%2042%2025Z%22%20fill%3D%22%23e9cf5a%22/%3E%3Cpath%20d%3D%22M9%2025A15%2015%200%200%201%2039%2025Z%22%20fill%3D%22%235fae6b%22/%3E%3Cpath%20d%3D%22M12%2025A12%2012%200%200%201%2036%2025Z%22%20fill%3D%22%234f8fd6%22/%3E%3Cpath%20d%3D%22M15%2025A9%209%200%200%201%2033%2025Z%22%20fill%3D%22%238a67c4%22/%3E%3Cpath%20d%3D%22M18%2025A6%206%200%200%201%2030%2025Z%22%20fill%3D%22%230b1430%22/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css?v=1794515527">
+<link rel="stylesheet" href="style.css?v=1794518262">
 </head>
 <body>
 <main class="set">
@@ -43,7 +43,7 @@
     </div>
 
     <div class="preview" id="preview" role="button" tabindex="-1" aria-label="Tune in">
-      <div class="tuning">tuning...</div>
+      <div class="slate" aria-hidden="true"><span>MARIN CABLE &middot; PLEASE STAND BY</span></div>
     </div>
 
     <div class="timebar" aria-hidden="true">
@@ -70,6 +70,7 @@
           </div>
           <div class="bbtns">
             <button type="button" id="binfo" aria-pressed="true">INFO</button>
+            <button type="button" id="blook" data-act="look" aria-pressed="false" aria-label="Look around: live Street View">LOOK</button>
             <button type="button" id="bshare">SHARE</button>
             <button type="button" id="bguide">GUIDE</button>
           </div>
@@ -107,7 +108,8 @@
       <div class="r-menu">
         <button type="button" class="rb" data-act="guide" aria-label="Guide">GUIDE</button>
         <button type="button" class="rb" data-act="info" aria-label="Info">INFO</button>
-        <button type="button" class="rb" data-act="exit" aria-label="Exit">EXIT</button>
+        <button type="button" class="rb r-exit" data-act="exit" aria-label="Exit">EXIT</button>
+        <button type="button" class="rb r-look" data-act="look" aria-label="Look around: live Street View">LOOK</button>
       </div>
     </div>
     <div class="r-pad">
@@ -159,6 +161,7 @@
 
 <script src="seed.js"></script>
 <script src="places.js"></script>
-<script src="app.js?v=1794515527"></script>
+<script src="config.js?v=1794518262"></script>
+<script src="app.js?v=1794518262"></script>
 </body>
 </html>
