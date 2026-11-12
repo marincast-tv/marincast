@@ -261,7 +261,7 @@ window.PLACES = [
     ],
     "verifiedOn": "2026-11-12",
     "status": "verified",
-    "story": "A 34-year-old still tells people he went to Drake, five years after the school was renamed. \"It's not the name, it's tradition,\" said the man, a brand consultant on his second Adderall of the morning, who lives in his parents' guest house and calls it real estate."
+    "story": "A 34-year-old still tells people he went to Drake, five years after the school was renamed. \"It's not the name, it's tradition,\" said the man, a brand consultant on his second Adderall of the morning, who lives in his parents' guest house and calls it his bungalow."
   },
   {
     "id": "ross-post-office",
