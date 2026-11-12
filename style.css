@@ -1264,3 +1264,139 @@ body {
   .screen.tuned .bstory { margin: 0; max-width: none; font-size: clamp(14px, 1.45cqw, 19px); line-height: 1.5; }
   .screen.tuned .bkey { top: auto; bottom: 1cqw; right: 1cqw; }
 }
+
+/* ---------- real photos (CC-licensed) ---------- */
+.preview .still.photo { object-fit: cover; }
+.credit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 3px 8px 4px;
+  background: rgba(0, 0, 0, .55);
+  color: rgba(255, 255, 255, .85);
+  font: 500 11px/1.3 var(--ui);
+  text-shadow: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.credit a:hover, .credit a:focus-visible { color: #fff; }
+@media (min-width: 720px) {
+  .credit { font-size: clamp(11px, 1cqw, 12px); }
+}
+@media (max-width: 719px) {
+  .preview.has-photo { margin-bottom: 22px; }
+  .credit { top: 100%; bottom: auto; background: transparent; color: rgba(255,255,255,.7); padding: 4px 2px; }
+}
+
+/* ---------- tuned-in info panel, 2009 cable-box style (desktop/tablet) ---------- */
+.btop, .bwhen, .bstrip { display: none; }
+.rating {
+  display: inline-block;
+  font: 700 .62em/1 var(--ui);
+  font-style: normal;
+  letter-spacing: .02em;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,.85);
+  border-radius: .35em;
+  padding: .22em .3em .16em;
+  text-shadow: none;
+  vertical-align: .18em;
+}
+.blk[hidden] { display: none; }
+
+@media (min-width: 720px) {
+  /* guide info panel: no clamping, fit-text shrinks instead */
+  .title, .dek { display: block; -webkit-line-clamp: unset; overflow: visible; }
+
+  .screen.tuned .banner { background: var(--gap); }
+  .screen.tuned .bin {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: 100%;
+    max-height: none;
+    overflow: hidden;
+    padding: 1.3cqw 1.5cqw 1.1cqw;
+    background: linear-gradient(to bottom, var(--navy) 0%, var(--navy) 38%, var(--navy-lo) 100%);
+  }
+  .screen.tuned .bch { display: none; }
+  .screen.tuned .btop {
+    display: block;
+    float: right;
+    margin: .25cqw 0 .3cqw 1.2cqw;
+  }
+  .bbadge {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    font: 700 clamp(14px, 1.6cqw, 24px)/1 var(--ui);
+    color: var(--white);
+  }
+  .bbadge .lock { color: var(--white); margin: 0; font-size: inherit; vertical-align: 0; }
+  .screen.tuned .btitle {
+    margin: 0;
+    font: 700 clamp(17px, 2.3cqw, 32px)/1.18 var(--ui);
+    color: var(--yellow);
+  }
+  .screen.tuned .bwhen {
+    display: block;
+    margin: .45cqw 0 .7cqw;
+    font: 600 clamp(13px, 1.35cqw, 20px)/1.25 var(--ui);
+    color: var(--white);
+  }
+  .screen.tuned .bstory {
+    flex: 0 1 auto;
+    margin: 0;
+    max-width: none;
+    font: 700 clamp(14px, 1.9cqw, 24px)/1.4 var(--ui);
+    color: var(--white);
+    text-shadow: var(--shadow);
+  }
+  .screen.tuned .bstrip {
+    display: block;
+    margin-top: auto;
+    padding-top: .8cqw;
+    font: 600 clamp(12px, 1.1cqw, 16px)/1.3 var(--ui);
+  }
+  .screen.tuned .btn { display: flex; gap: .7em; font: inherit; }
+  .screen.tuned .btn b { width: 3.2em; color: var(--chan); }
+  .screen.tuned .bin.tight .bstrip { display: none; }
+  .banner.compact .bstrip { display: none !important; }
+
+  /* soft-key pills along the bottom, like the time bar */
+  .screen.tuned .bside {
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .35cqw;
+    margin-top: .8cqw;
+    padding-top: .7cqw;
+    border-top: 1px solid rgba(255,255,255,.18);
+  }
+  .screen.tuned .bin.tight .bside, .banner.compact .bside { margin-top: auto; }
+  .screen.tuned .flip, .screen.tuned .bbtns { display: contents; }
+  .screen.tuned .flip button, .screen.tuned .bbtns button {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: .5em .7em .42em;
+    border: 1px solid #0b1430;
+    border-radius: 999px;
+    font: 700 clamp(11px, 1.05cqw, 15px)/1 var(--ui);
+    letter-spacing: .03em;
+    color: var(--white);
+    background: linear-gradient(to bottom, #213b7c 0%, var(--bar) 100%);
+    text-shadow: var(--shadow);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+  }
+  .screen.tuned .flip button[aria-pressed="true"], .screen.tuned #blook[aria-pressed="true"] {
+    color: var(--hi-ink);
+    background: var(--hi);
+    text-shadow: none;
+  }
+  .screen.tuned .flip button:active, .screen.tuned .bbtns button:active { transform: translateY(1px); }
+}

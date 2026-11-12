@@ -53,8 +53,15 @@
     var g = p && p.gag;
     return g && (g.type === "locked" || g.type === "unlisted") ? g : null;
   }
+  // a real 2005-2011 photo, when a channel has one and it loaded
+  var photoBad = {};
+  function photoFor(p) {
+    var ph = p && p.photo;
+    return ph && typeof ph.src === "string" && ph.src && !photoBad[p.id] ? ph : null;
+  }
   function taped(p) {
-    var m = /^(\d{4})-(\d{1,2})/.exec(p.captureDate || "");
+    var ph = state.col === 0 && photoFor(p);
+    var m = /^(\d{4})-(\d{1,2})/.exec((ph && ph.taken) || p.captureDate || "");
     return m ? MONTHS[parseInt(m[2], 10) - 1] + " " + m[1] : "2008";
   }
   function clockTime() {
@@ -67,6 +74,23 @@
   }
   function cur() { return places[state.i]; }
   function linkFor(id) { return location.origin + location.pathname + "#" + id; }
+  // shareable link: a per-channel page with link-preview tags that redirects to /#id
+  function shareURL(id) { return "https://marincast.com/ch/" + encodeURIComponent(id) + "/"; }
+  // share the current channel: native sheet on phones, else copy. done(true|false|"shared")
+  function shareCurrent(done) {
+    var p = cur(), url = shareURL(p.id);
+    if (isPhone() && navigator.share) {
+      navigator.share({ title: "Marincast", text: curly(p.headline || p.name || ""), url: url })
+        .then(function () { done("shared"); }, function (e) { if (e && e.name === "AbortError") done("cancel"); else copyText(url, done); });
+      return;
+    }
+    copyText(url, done);
+  }
+  function copyText(url, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(fallbackCopy(url)); });
+    } else done(fallbackCopy(url));
+  }
   function srcFor(p, col) { return col === 1 && p.nowEmbedSrc ? p.nowEmbedSrc : p.embedSrc; }
 
   // ---------- sound ----------
@@ -153,9 +177,62 @@
   function setCompact(c) {
     compact = c;
     banner.classList.toggle("compact", c);
+    scheduleFit();
     $("binfo").setAttribute("aria-pressed", c ? "false" : "true");
     try { sessionStorage.setItem("rt-compact", c ? "1" : "0"); } catch (e) {}
   }
+
+  // ---------- fit text: nothing scrolls on desktop, shrink type until it fits ----------
+
+  var fitRaf = 0;
+  function scheduleFit() {
+    cancelAnimationFrame(fitRaf);
+    fitRaf = requestAnimationFrame(fitAll);
+  }
+  function overflows(box) { return box.scrollHeight > box.clientHeight + 1; }
+  // shrink el's font-size from its CSS size down to min (px) until box stops overflowing
+  function shrink(box, elx, min, start) {
+    elx.style.fontSize = start ? start + "px" : "";
+    if (!overflows(box)) return true;
+    var size = start || parseFloat(getComputedStyle(elx).fontSize);
+    while (overflows(box) && size > min) {
+      size = Math.max(min, size - 0.5);
+      elx.style.fontSize = size + "px";
+    }
+    return !overflows(box);
+  }
+  function fitAll() {
+    var bin = $("bin"), info = document.querySelector(".info");
+    var els = [$("bstory"), $("btitle"), $("dek"), $("title")];
+    if (isPhone()) {
+      els.forEach(function (x) { x.style.fontSize = ""; });
+      bin.classList.remove("tight");
+      return;
+    }
+    if (state.tuned) {
+      bin.classList.remove("tight");
+      $("btitle").style.fontSize = "";
+      // start the story large (fills the panel like a real info screen), then shrink to fit
+      var sw = screen.clientWidth || 900;
+      var story = $("bstory"), startPx = Math.max(14, Math.min(26, sw * 0.023));
+      story.style.fontSize = "";
+      if (!shrink(bin, story, 12, startPx)) {
+        if (!shrink(bin, $("btitle"), 15)) {
+          bin.classList.add("tight");        // last resort: drop the THEN / NOW strip
+          shrink(bin, story, 12, startPx);
+        }
+      }
+    } else if (info) {
+      $("title").style.fontSize = "";
+      if (!shrink(info, $("dek"), 11)) shrink(info, $("title"), 15);
+    }
+  }
+  if (window.ResizeObserver) {
+    var fitRO = new ResizeObserver(scheduleFit);
+    fitRO.observe(screen);
+  }
+  window.addEventListener("resize", scheduleFit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleFit);
 
   // ---------- selection ----------
 
@@ -182,6 +259,10 @@
     $("bthen").textContent = p.then || "";
     $("bnow").textContent = p.now || "";
     $("bstory").textContent = curly(p.story || "");
+    $("bchan").textContent = chNum(state.i) + " " + (g && g.type === "unlisted" ? "----" : code(p));
+    $("blk").hidden = !(g && g.type === "locked");
+    $("bwhen").textContent = state.col === 1 ? "Now \u00b7 " + today() : "Taped " + taped(p);
+    scheduleFit();
     $("bthen").parentNode.classList.toggle("on", state.col === 0);
     $("bnow").parentNode.classList.toggle("on", state.col === 1);
     $("f2008").setAttribute("aria-pressed", state.col === 0 ? "true" : "false");
@@ -261,15 +342,65 @@
       "&fov=" + fov + "&return_error_code=true&key=" + encodeURIComponent(SV_KEY);
   }
   function preloadOther() {
-    if (!stillsOn() || !state.tuned) return;
-    var p = cur(), other = state.col ? p.embedSrc : p.nowEmbedSrc;
+    if (!state.tuned) return;
+    var p = cur();
+    if (state.col === 1 && photoFor(p)) { var ip = new Image(); ip.src = photoFor(p).src; return; }
+    if (!stillsOn()) return;
+    var other = state.col ? p.embedSrc : p.nowEmbedSrc;
     if (!other || stillBad[other]) return;
     var u = stillURL(other);
     if (u) { var im = new Image(); im.referrerPolicy = "no-referrer-when-downgrade"; im.src = u; }
   }
 
+  var credit = null;
+  function setCredit(ph) {
+    if (credit) { credit.remove(); credit = null; }
+    preview.classList.toggle("has-photo", !!ph);
+    if (!ph) return;
+    credit = el("div", "credit");
+    credit.appendChild(document.createTextNode("Photo: "));
+    var a = el("a", null, ph.author || "source");
+    if (ph.page) { a.href = ph.page; a.target = "_blank"; a.rel = "noopener"; } else a = el("span", null, ph.author || "");
+    credit.appendChild(a);
+    if (ph.license) {
+      credit.appendChild(document.createTextNode(" \u00b7 "));
+      var l = el(ph.licenseUrl ? "a" : "span", null, ph.license);
+      if (ph.licenseUrl) { l.href = ph.licenseUrl; l.target = "_blank"; l.rel = "noopener license"; }
+      credit.appendChild(l);
+    }
+    credit.addEventListener("click", function (e) { e.stopPropagation(); });
+    preview.appendChild(credit);
+  }
+
   function setFrame(src) {
     var p = cur();
+    // 2008 view: a real photo beats the Street View still
+    var ph = !state.look && src === p.embedSrc && photoFor(p);
+    if (ph) {
+      var pkey = "photo|" + ph.src;
+      if (pkey === frameSrc && frame) return;
+      if (frame) { frame.onerror = null; frame.onload = null; frame.src = "about:blank"; frame.remove(); }
+      preview.classList.remove("loaded");
+      frame = document.createElement("img");
+      frame.className = "still photo";
+      frame.alt = (p.name || p.town || p.id) + (ph.taken ? ", " + ph.taken : "");
+      frame.decoding = "async";
+      frame.onload = function () { preview.classList.add("loaded"); };
+      frame.onerror = function () {
+        photoBad[p.id] = true;
+        frameSrc = "";
+        setCredit(null);
+        render();
+        setFrame(src);
+      };
+      frame.src = ph.src;
+      preview.appendChild(frame);
+      frameSrc = pkey;
+      setCredit(ph);
+      preloadOther();
+      return;
+    }
+    setCredit(null);
     var still = stillsOn() && !state.look && !stillBad[src] && stillURL(src);
     var key = still ? "img|" + still : "ifr|" + src;
     if (key === frameSrc && frame) return;
@@ -313,6 +444,7 @@
   }
 
   function clearFrame() {
+    setCredit(null);
     if (frame) { frame.onerror = null; frame.onload = null; frame.src = "about:blank"; frame.remove(); }
     frame = null; frameSrc = "";
     preview.classList.remove("loaded");
@@ -438,6 +570,7 @@
       banner.classList.remove("up");
       // let the banner slide up from the bottom
       setTimeout(showBanner, 30);
+      scheduleFit();
     }
 
     if (g && g.type === "locked" && !p._seenLock) {
@@ -466,6 +599,7 @@
     cutTo(function () {
       screen.classList.remove("tuned");
       keepInView();
+      scheduleFit();
       if (isPhone()) {
         clearFrame();
         var r = rows[state.i];
@@ -549,14 +683,12 @@
   // ---------- share / mute ----------
 
   function share(btn) {
-    var url = linkFor(cur().id), label = btn.textContent;
-    function done(ok) {
-      btn.textContent = ok ? "COPIED" : "COPY FAILED";
+    var label = btn.textContent;
+    shareCurrent(function (ok) {
+      if (ok === "cancel") return;
+      btn.textContent = ok === "shared" ? "SHARED" : ok ? "COPIED" : "COPY FAILED";
       setTimeout(function () { btn.textContent = label; }, 1500);
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(fallbackCopy(url)); });
-    } else done(fallbackCopy(url));
+    });
   }
   function fallbackCopy(text) {
     try {
@@ -762,11 +894,7 @@
       goTo(i);
     },
     share: function () {
-      var url = linkFor(cur().id);
-      function done(ok) { remoteMsg(ok ? "COPIED" : "NO COPY"); }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(fallbackCopy(url)); });
-      } else done(fallbackCopy(url));
+      shareCurrent(function (ok) { if (ok !== "cancel") remoteMsg(ok === "shared" ? "SHARED" : ok ? "COPIED" : "NO COPY"); });
     },
     last: function () { if (lastI >= 0) goTo(lastI); else remoteMsg("NO LAST"); },
     volup: function () { setMute(false); showVol(); blip(1200); },

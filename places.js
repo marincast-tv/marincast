@@ -142,7 +142,15 @@ window.PLACES = [
     "sources": [],
     "verifiedOn": "2026-11-12",
     "status": "verified",
-    "story": "A Mill Valley family that left for Stinson at ten Saturday has yet to reach the sand. \"The tourists ruin it,\" said the father, who has rented the same house one week every August since 2011 and calls it \"our place,\" while his wife, three days into a mushroom protocol, called the traffic a lesson in patience."
+    "story": "A Mill Valley family that left for Stinson at ten Saturday has yet to reach the sand. \"The tourists ruin it,\" said the father, who has rented the same house one week every August since 2011 and calls it \"our place,\" while his wife, three days into a mushroom protocol, called the traffic a lesson in patience.",
+    "photo": {
+      "src": "https://live.staticflickr.com/3574/3461404020_86bd2812d5_h.jpg",
+      "page": "https://www.flickr.com/photos/_ellie_/3461404020/",
+      "author": "ellie (_-ellie-_)",
+      "license": "CC BY-NC-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
+      "taken": "2009-04"
+    }
   },
   {
     "id": "manzanita-park-and-ride",
@@ -261,7 +269,15 @@ window.PLACES = [
     ],
     "verifiedOn": "2026-11-12",
     "status": "verified",
-    "story": "A 34-year-old still tells people he went to Drake, five years after the school was renamed. \"It's not the name, it's tradition,\" said the man, a brand consultant on his second Adderall of the morning, who lives in his parents' guest house and calls it his bungalow."
+    "story": "A 34-year-old still tells people he went to Drake, five years after the school was renamed. \"It's not the name, it's tradition,\" said the man, a brand consultant on his second Adderall of the morning, who lives in his parents' guest house and calls it his bungalow.",
+    "photo": {
+      "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Sir_Francis_Drake_High_School.jpg?width=1280",
+      "page": "https://commons.wikimedia.org/wiki/File:Sir_Francis_Drake_High_School.jpg",
+      "author": "Rbear2000",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "taken": "2011-05"
+    }
   },
   {
     "id": "ross-post-office",
@@ -300,7 +316,15 @@ window.PLACES = [
       "https://visitmarin.org/things-to-do/shopping/shopping-centers/marin-country-mart"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/4126/5062564201_7a99d27b2b_b.jpg",
+      "page": "https://www.flickr.com/photos/62005704@N00/5062564201/",
+      "author": "Bjorn",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "taken": "2010-09"
+    }
   },
   {
     "id": "novato-narrows",
@@ -426,7 +450,15 @@ window.PLACES = [
       "https://deanjab.com/2013/10/marin-joes-corte-madera-california/"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/1194/1399626743_0e1022f29a_b.jpg",
+      "page": "https://www.flickr.com/photos/jeremybrooks/1399626743/",
+      "author": "Jeremy Brooks",
+      "license": "CC BY-NC 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
+      "taken": "2007-09"
+    }
   },
   {
     "id": "the-hub",
@@ -571,7 +603,15 @@ window.PLACES = [
       "https://preview-prod.w.sfchronicle.com/food/restaurants/article/the-trident-sausalito-closes-21273481.php"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/6159/6165843752_5931ec2640_b.jpg",
+      "page": "https://www.flickr.com/photos/lookingforjanis/6165843752/",
+      "author": "LookingforJanis",
+      "license": "CC BY-NC-ND 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
+      "taken": "2011-08"
+    }
   },
   {
     "id": "wincup-tam-ridge",
@@ -614,7 +654,15 @@ window.PLACES = [
       "https://cinematreasures.org/theaters/403"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/33/47230035_27123ebc7c_b.jpg",
+      "page": "https://www.flickr.com/photos/psd/47230035/",
+      "author": "psd",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+      "taken": "2005-09"
+    }
   },
   {
     "id": "corte-madera-dennys",
@@ -679,7 +727,15 @@ window.PLACES = [
       "https://cinematreasures.org/theaters/3508"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/5121/5225460938_3fff86e9e1_b.jpg",
+      "page": "https://www.flickr.com/photos/mytravelphotos/5225460938/",
+      "author": "Jasperdo",
+      "license": "CC BY-NC-ND 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-nd/2.0/",
+      "taken": "2010-11"
+    }
   },
   {
     "id": "cafe-gratitude-miracle-mile",
@@ -744,7 +800,15 @@ window.PLACES = [
       "https://www.cinematreasures.org/theaters/3404"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/153/330719103_4c11326eee_b.jpg",
+      "page": "https://www.flickr.com/photos/rustinpc/330719103/",
+      "author": "rustinpc",
+      "license": "CC BY-NC 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc/2.0/",
+      "taken": "2006-12"
+    }
   },
   {
     "id": "mill-valley-taco-bell",
@@ -786,7 +850,15 @@ window.PLACES = [
       "https://www.thearknewspaper.com/live/tiburon-bike-lanes-pushed-to-2029-as-caltrans-proceeds-along-rest-of-corridor"
     ],
     "verifiedOn": "2026-11-12",
-    "status": "verified"
+    "status": "verified",
+    "photo": {
+      "src": "https://live.staticflickr.com/2254/2029987269_09a9feddf9_b.jpg",
+      "page": "https://www.flickr.com/photos/panavatar/2029987269/",
+      "author": "Lynae Zebest (panavatar)",
+      "license": "CC BY-NC-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-nc-sa/2.0/",
+      "taken": "2007-11"
+    }
   },
   {
     "id": "saylors-sausalito",
