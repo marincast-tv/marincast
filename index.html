@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marincast</title>
+<meta name="description" content="Marin, the way you left it.">
+<meta name="theme-color" content="#0a0b10">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%20-11.5%2048%2048%22%3E%3Cpath%20d%3D%22M0%2025A24%2024%200%200%201%2048%2025Z%22%20fill%3D%22%23d9524a%22/%3E%3Cpath%20d%3D%22M3%2025A21%2021%200%200%201%2045%2025Z%22%20fill%3D%22%23e58b3a%22/%3E%3Cpath%20d%3D%22M6%2025A18%2018%200%200%201%2042%2025Z%22%20fill%3D%22%23e9cf5a%22/%3E%3Cpath%20d%3D%22M9%2025A15%2015%200%200%201%2039%2025Z%22%20fill%3D%22%235fae6b%22/%3E%3Cpath%20d%3D%22M12%2025A12%2012%200%200%201%2036%2025Z%22%20fill%3D%22%234f8fd6%22/%3E%3Cpath%20d%3D%22M15%2025A9%209%200%200%201%2033%2025Z%22%20fill%3D%22%238a67c4%22/%3E%3Cpath%20d%3D%22M18%2025A6%206%200%200%201%2030%2025Z%22%20fill%3D%22%230b1430%22/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="set">
+  <h1 class="sr">Marincast. Marin, the way you left it.</h1>
+
+  <div class="stage">
+  <div class="tv">
+  <div class="bezel">
+  <div class="panel" id="panel">
+  <section class="screen" id="screen">
+    <div class="tbar">
+      <button type="button" class="tb-back" data-act="exit" aria-label="Back to guide">&lsaquo; GUIDE</button>
+      <span class="tb-ch" id="tbch"></span>
+      <span class="tb-arrows">
+        <button type="button" data-act="chdown" aria-label="Channel down">&#9660;</button>
+        <button type="button" data-act="chup" aria-label="Channel up">&#9650;</button>
+      </span>
+    </div>
+    <div class="head">
+      <span class="brand"><svg class="mark" viewBox="0 0 22 40" aria-hidden="true" focusable="false"><path d="M20 2A18 18 0 0 0 20 38A18.42 18.42 0 0 1 20 2Z" fill="#d9524a"/><path d="M20 2A18.42 18.42 0 0 0 20 38A20.23 20.23 0 0 1 20 2Z" fill="#e9cf5a"/><path d="M20 2A20.23 20.23 0 0 0 20 38A25.35 25.35 0 0 1 20 2Z" fill="#6fb0ea"/></svg><span class="word">marincast</span></span>
+      <span class="listings"><span class="ml">Marin Listings</span><span class="clock" id="clock"></span></span>
+      <span class="badge">THEN / NOW</span>
+      <span class="hint hint-p"><i aria-hidden="true">&#9656;</i> Tap a channel to tune in</span>
+    </div>
+
+    <div class="info">
+      <div class="r2"><h2 class="title" id="title"></h2><span class="chline" id="chline"></span></div>
+      <div class="taped" id="taped"></div>
+      <p class="dek" id="dek"></p>
+    </div>
+
+    <div class="preview" id="preview" role="button" tabindex="-1" aria-label="Tune in">
+      <div class="tuning">tuning...</div>
+    </div>
+
+    <div class="timebar" aria-hidden="true">
+      <span class="yr">2008 <i class="tri-l"></i></span>
+      <span class="col">Then</span>
+      <span class="col">Now <i class="tri-r"></i></span>
+      <span class="hint hint-d"><i aria-hidden="true">&#9656;</i> Click a channel or press a number to tune in</span>
+    </div>
+
+    <div class="grid" id="grid" role="listbox" aria-label="Channels" tabindex="0"></div>
+
+    <div class="banner" id="banner">
+      <div class="bin" id="bin">
+        <div class="bmain">
+          <div class="bch" id="bch"></div>
+          <div class="btitle" id="btitle"></div>
+          <div class="btn"><b>THEN</b><span id="bthen"></span></div>
+          <div class="btn"><b>NOW</b><span id="bnow"></span></div>
+        </div>
+        <div class="bside">
+          <div class="flip" role="group" aria-label="Time">
+            <button type="button" id="f2008"><i class="tri-l"></i>2008</button>
+            <button type="button" id="fnow">NOW<i class="tri-r"></i></button>
+          </div>
+          <div class="bbtns">
+            <button type="button" id="binfo" aria-pressed="true">INFO</button>
+            <button type="button" id="bshare">SHARE</button>
+            <button type="button" id="bguide">GUIDE</button>
+          </div>
+        </div>
+        <p class="bstory" id="bstory"></p>
+      </div>
+      <div class="bkey keypad" aria-live="polite"></div>
+    </div>
+
+    <div class="keypad gkey" aria-live="polite"></div>
+    <div class="cut" id="cut" hidden></div>
+    <div class="notice" id="notice" hidden>
+      <div class="nbox"><i class="lock"></i><p id="noticeText"></p></div>
+    </div>
+  </section>
+  </div>
+  <div class="chin">
+    <span class="maker">TAMALPAIS</span>
+    <span class="keys" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="led" aria-hidden="true"></span>
+  </div>
+  </div>
+  <div class="stand" aria-hidden="true"><div class="neck"></div><div class="base"></div></div>
+  </div>
+
+  <aside class="remote" id="remote" aria-label="Remote control">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="r-top">
+      <span class="ir" id="ir" aria-hidden="true"></span>
+      <span class="r-brand">marincast</span>
+      <span class="r-msg" id="rmsg" aria-live="polite"></span>
+    </div>
+    <div class="r-head">
+      <button type="button" class="rb b-power" data-act="power" aria-label="Power"><i class="pw" aria-hidden="true"></i></button>
+      <div class="r-menu">
+        <button type="button" class="rb" data-act="guide" aria-label="Guide">GUIDE</button>
+        <button type="button" class="rb" data-act="info" aria-label="Info">INFO</button>
+        <button type="button" class="rb" data-act="exit" aria-label="Exit">EXIT</button>
+      </div>
+    </div>
+    <div class="r-pad">
+      <div class="dpad">
+        <button type="button" class="dp d-up" data-act="up" aria-label="Up"><i></i></button>
+        <button type="button" class="dp d-left" data-act="left" aria-label="Left, 2008"><i></i></button>
+        <button type="button" class="dp d-right" data-act="right" aria-label="Right, now"><i></i></button>
+        <button type="button" class="dp d-down" data-act="down" aria-label="Down"><i></i></button>
+        <button type="button" class="rb d-ok" data-act="ok" aria-label="OK, select">OK</button>
+      </div>
+    </div>
+    <div class="r-color">
+      <button type="button" class="rb c-btn" data-act="random" aria-label="Surprise me: random channel"><i class="s-tri"></i></button>
+      <button type="button" class="rb c-btn" data-act="share" aria-label="Share: copy link"><i class="s-sq"></i></button>
+      <button type="button" class="rb c-btn" data-act="last" aria-label="Last channel"><i class="s-dot"></i></button>
+    </div>
+    <div class="r-rock">
+      <div class="rocker">
+        <button type="button" class="rb" data-act="volup" aria-label="Volume up, sound on">+</button>
+        <span>VOL</span>
+        <button type="button" class="rb" data-act="voldown" aria-label="Volume down, mute">&minus;</button>
+      </div>
+      <div class="rocker">
+        <button type="button" class="rb" data-act="chup" aria-label="Channel up">&#9650;</button>
+        <span>CH</span>
+        <button type="button" class="rb" data-act="chdown" aria-label="Channel down">&#9660;</button>
+      </div>
+    </div>
+    <div class="r-num">
+      <button type="button" class="rb" data-act="d1" aria-label="1">1</button>
+      <button type="button" class="rb" data-act="d2" aria-label="2">2</button>
+      <button type="button" class="rb" data-act="d3" aria-label="3">3</button>
+      <button type="button" class="rb" data-act="d4" aria-label="4">4</button>
+      <button type="button" class="rb" data-act="d5" aria-label="5">5</button>
+      <button type="button" class="rb" data-act="d6" aria-label="6">6</button>
+      <button type="button" class="rb" data-act="d7" aria-label="7">7</button>
+      <button type="button" class="rb" data-act="d8" aria-label="8">8</button>
+      <button type="button" class="rb" data-act="d9" aria-label="9">9</button>
+      <button type="button" class="rb n0" data-act="d0" aria-label="0">0</button>
+    </div>
+  </aside>
+  </div>
+
+  <button type="button" class="remote-tab" id="remoteTab" aria-controls="remote" aria-expanded="false">REMOTE</button>
+  <div class="sheet-scrim" id="sheetScrim" hidden></div>
+
+  <p class="foot">Imagery: Google Street View, captured on the dates shown. Satire. Not affiliated with any cable company.</p>
+</main>
+
+<script src="seed.js"></script>
+<script src="places.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
