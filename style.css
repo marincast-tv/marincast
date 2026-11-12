@@ -1036,3 +1036,124 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .remote { transition: none; }
 }
+
+/* ---------- first-visit hint + phone top bar ---------- */
+
+.hint {
+  font: 600 .78em/1 var(--ui);
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: .06em;
+  color: #f6eea0;
+  white-space: nowrap;
+}
+.hint i { font-style: normal; display: inline-block; animation: hintblink 1.1s steps(1) infinite; }
+@keyframes hintblink { 50% { opacity: 0; } }
+.hint-seen .hint { display: none; }
+.hint-p { display: none; }
+.timebar { position: relative; }
+.hint-d { position: absolute; right: 3.4cqw; top: 50%; transform: translateY(-50%); font-size: .82em; }
+.screen.tuned .hint { display: none; }
+@media (prefers-reduced-motion: reduce) { .hint i { animation: none; } }
+
+.tbar { display: none; grid-area: tbar; }
+.hl { display: none; }
+
+/* ---------- phone: one clear thing at a time ---------- */
+@media (max-width: 719px) {
+  body { padding-bottom: 50px; }   /* room for the remote pill */
+
+  /* slim frame, tiny chin */
+  .set { padding: 6px 6px 10px; }
+  .bezel { padding: 6px 6px 0; border-radius: 8px; }
+  .chin { height: 16px; }
+  .maker { font-size: 7px; letter-spacing: .5em; }
+  .led { right: 10px; width: 3px; height: 3px; margin-top: -1.5px; }
+
+  /* guide = logo row + channel list */
+  .screen { grid-template-areas: "head" "grid"; grid-template-rows: auto auto; }
+  .screen:not(.tuned) .preview,
+  .screen:not(.tuned) .info,
+  .screen:not(.tuned) .timebar { display: none; }
+  .head { flex-wrap: wrap; align-items: center; gap: 2px 10px; padding: 10px 12px 8px; }
+  .brand { font-size: 24px; }
+  .listings { order: 0; flex-basis: auto; margin-left: auto; font-size: 13px; }
+  .ml, .badge { display: none; }
+  .hint-p { display: block; order: 5; flex-basis: 100%; font-size: 12px; line-height: 1.2; padding-top: 2px; }
+  .hint-seen .hint-p { display: none; }
+
+  .grid { max-height: none; overflow: visible; }
+  .row { min-height: 58px; }
+  .ch { width: 84px; padding: 0 6px 0 8px; font-size: 14px; }
+  .then, .now { display: none; }
+  .hl {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+    white-space: normal;
+    font: 600 16px/1.3 var(--ui);
+    background: linear-gradient(to bottom, #2a4a8e 0%, var(--navy) 100%);
+  }
+  .hl span { overflow: visible; text-overflow: clip; }
+  .g1 .hl { background: linear-gradient(to bottom, #278c57 0%, var(--green) 100%); }
+  .g2 .hl { background: linear-gradient(to bottom, #6a3a9c 0%, var(--purple) 100%); }
+  .row.sel .hl { background: var(--hi); color: var(--hi-ink); text-shadow: none; }
+
+  /* tuned in: top bar, full-width picture, banner */
+  .screen.tuned { grid-template-areas: "tbar" "preview" "banner"; grid-template-rows: auto auto auto; }
+  .screen.tuned .tbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 6px 6px 4px;
+    background: var(--bar);
+  }
+  .tbar button {
+    appearance: none;
+    border: 0;
+    background: none;
+    color: var(--white);
+    font: 700 14px/1 var(--ui);
+    text-shadow: var(--shadow);
+    min-height: 40px;
+    padding: 0 10px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tbar button:active { color: var(--yellow); }
+  .tbar button:focus-visible { outline: 2px solid var(--yellow); outline-offset: -2px; }
+  .tb-ch { flex: 1; text-align: center; font: 600 14px/1 var(--ui); color: var(--chan); }
+  .tb-arrows { display: flex; gap: 4px; }
+  .tb-arrows button { width: 44px; padding: 0; font-size: 15px; background: var(--navy); border-radius: 6px; }
+  .screen.tuned .preview { aspect-ratio: 4 / 3; height: auto; }
+
+  .bch { font-size: 13px; color: var(--chan); }
+  .btitle { font-size: 18px; line-height: 1.25; margin: 4px 0 10px; }
+  .btn { display: none; }
+  .banner.compact .bstory { display: block; }
+  .bstory { font-size: 16px; line-height: 1.55; }
+  .bside { flex-direction: row; gap: 8px; }
+  .flip { flex: 1; gap: 0; }
+  .flip button { flex: 1; min-height: 44px; font-size: 14px; border-radius: 0; }
+  .flip button:first-child { border-radius: 8px 0 0 8px; }
+  .flip button:last-child { border-radius: 0 8px 8px 0; }
+  .bbtns { flex: none; }
+  #binfo, #bguide { display: none; }
+  #bshare { min-height: 44px; padding: 0 14px; border-radius: 8px; }
+
+  /* remote: a small pill bottom-right */
+  .remote-tab {
+    left: auto;
+    right: 12px;
+    bottom: 12px;
+    transform: none;
+    width: auto;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 17px;
+    font-size: 11px;
+    letter-spacing: .1em;
+    box-shadow: 0 2px 8px rgba(0,0,0,.6), inset 0 1px 0 #fff;
+  }
+}

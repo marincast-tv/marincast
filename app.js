@@ -346,6 +346,7 @@
 
     function enter() {
       hintSeen();
+      if (isPhone()) window.scrollTo(0, 0);
       noteTuned(state.i);
       state.tuned = true;
       screen.classList.add("tuned");
