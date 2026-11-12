@@ -214,7 +214,7 @@ window.PLACES = [
     "captureDate": "2008-04",
     "headline": "Newcomer Mourns Miller Avenue Whole Foods as the Last Authentic Thing",
     "dek": "A vigil was planned, then cancelled over the candles' sourcing.",
-    "story": "The Quonset hut Whole Foods on Miller has closed for good, mourned by a petition with more signatures than it had parking spaces. \"It was the last authentic thing in Mill Valley,\" said a woman who moved from Noe Valley in 2019 and avoids the other Whole Foods, same company, because its energy is corporate.",
+    "story": "The Quonset hut Whole Foods on Miller has closed for good, mourned by a petition with more signatures than it had parking spaces. \"It was the last authentic thing in Mill Valley,\" said a woman who moved from Noe Valley in 2019 and refuses to shop at the Whole Foods on Blithedale because, unlike this one, it feels corporate.",
     "then": "The little Whole Foods.",
     "now": "Closed for good, 2025.",
     "sources": [
