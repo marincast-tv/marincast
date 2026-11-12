@@ -278,7 +278,7 @@ window.PLACES = [
     "now": "Still the post office.",
     "verifiedOn": "2026-11-12",
     "status": "verified",
-    "story": "Downtown Ross remains one post office and a lawn nobody has ever sat on, officials confirm. \"People ask where the shops are. I tell them that's what San Anselmo is for,\" said a woman in riding boots who has not been near a horse since March and keeps the lawn on her vision board, to stay humble."
+    "story": "Downtown Ross remains one post office and a lawn nobody has ever sat on, officials confirm. \"People ask where the shops are. I tell them that's what San Anselmo is for,\" said a woman in riding boots who has not been near a horse since March and sent her kids to Ross School, the public one, \"so they'd know what the real world is like.\""
   },
   {
     "id": "marin-brewing-larkspur",
