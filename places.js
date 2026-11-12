@@ -212,9 +212,9 @@ window.PLACES = [
     "embedSrc": "https://www.google.com/maps/embed?pb=!4v1794502893934!6m8!1m7!1sIpcr8BPdYQSHaoTfPTXI0A!2m2!1d37.8963188!2d-122.5358826!3f228!4f0!5f0.7820865974627469",
     "nowEmbedSrc": "https://www.google.com/maps/embed?pb=!4v1794502893934!6m8!1m7!1sxhgLDHl3gXI-iKa27pfuYQ!2m2!1d37.8962986!2d-122.5358521!3f228!4f0!5f0.7820865974627469",
     "captureDate": "2008-04",
-    "headline": "Newcomer Mourns Miller Avenue Whole Foods as the Last Authentic Thing",
-    "dek": "A vigil was planned, then cancelled over the candles' sourcing.",
-    "story": "The Quonset hut Whole Foods on Miller has closed for good, mourned by a petition with more signatures than it had parking spaces. \"It was the last authentic thing in Mill Valley,\" said a woman who moved from Noe Valley in 2019 and refuses to shop at the Whole Foods on Blithedale because, unlike this one, it feels corporate.",
+    "headline": "Mill Valley Holds Vigil for Beloved Local Grocer, Amazon",
+    "dek": "Amazon closed the Quonset hut Whole Foods in 2025. Residents mourned it as a small local business.",
+    "story": "Amazon has closed the Whole Foods in the Quonset hut on Miller, and more than 1,400 residents signed a petition to save what several called \"the last mom-and-pop in town.\" \"You have to support local,\" said a woman who has had three Amazon packages delivered since the closing was announced, one of them candles for the vigil.",
     "then": "The little Whole Foods.",
     "now": "Closed for good, 2025.",
     "sources": [
