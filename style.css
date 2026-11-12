@@ -1234,7 +1234,7 @@ body {
 /* ---------- tuned in on desktop/tablet: squeeze-back, 4:3 picture left, banner column right ---------- */
 @media (min-width: 720px) {
   .screen.tuned {
-    grid-template-columns: 75% 25%;          /* 75% of a 16:9 width = a 4:3 box at full height */
+    grid-template-columns: minmax(0, 58fr) minmax(300px, 42fr);   /* still box : story column */
     grid-template-rows: minmax(0, 1fr);
     grid-template-areas: "preview banner";
   }
@@ -1253,10 +1253,14 @@ body {
     row-gap: 1.1cqw;
     padding: 1.4cqw 1.3cqw 1.6cqw;
   }
-  .screen.tuned .btitle { font-size: clamp(17px, 2.05cqw, 34px); }
+  .screen.tuned .btitle { font-size: clamp(17px, 2cqw, 28px); }
   .screen.tuned .bside { flex-direction: column; align-items: stretch; gap: .6cqw; }
   .screen.tuned .flip button { flex: 1; }
-  .screen.tuned .bbtns { display: grid; grid-template-columns: 1fr 1fr; gap: .4cqw; }
-  .screen.tuned .bstory { margin: 0; max-width: none; font-size: clamp(14px, 1.42cqw, 22px); line-height: 1.5; }
+  .screen.tuned .bbtns { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4cqw; }
+  /* narrow column: 2x2 instead of a cramped single row */
+  @container (max-width: 860px) {
+    .screen.tuned .bbtns { grid-template-columns: 1fr 1fr; }
+  }
+  .screen.tuned .bstory { margin: 0; max-width: none; font-size: clamp(14px, 1.45cqw, 19px); line-height: 1.5; }
   .screen.tuned .bkey { top: auto; bottom: 1cqw; right: 1cqw; }
 }
